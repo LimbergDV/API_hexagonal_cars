@@ -1,10 +1,11 @@
 package main
 
 import (
-	routesCars "api-hexagonal-cars/cars/infrastructure/routes"
-	routesCustomers "api-hexagonal-cars/customers/infrastructure/routes"
-	cars "api-hexagonal-cars/cars/infrastructure"
-	customers "api-hexagonal-cars/customers/infrastructure"
+	
+	routesCars "api-hexagonal-cars/src/cars/infrastructure/routes"
+	routesCustomers "api-hexagonal-cars/src/customers/infrastructure/routes"
+	cars "api-hexagonal-cars/src/cars/infrastructure"
+	customers "api-hexagonal-cars/src/customers/infrastructure"
 	
 	
 
