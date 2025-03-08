@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"api-hexagonal-cars/src/cars/application"
+	"api-hexagonal-cars/src/cars/application/UseCases"
 	"api-hexagonal-cars/src/cars/domain"
 	"api-hexagonal-cars/src/cars/infrastructure"
 	"fmt"

@@ -1,6 +1,11 @@
 package infrastructure
 
-var mysql *MySQL
+import "api-hexagonal-cars/src/cars/infrastructure/adapters"
+ 
+var (
+	mysql *MySQL
+	rabbitmq *adapters.Rabbit
+)
 
 func GoMySQL() {
 	mysql = NewMySQL()
@@ -8,4 +13,12 @@ func GoMySQL() {
 
 func GetMySQL() *MySQL {
 	return mysql 
+}
+
+func GoRabbitMQ(){
+	rabbitmq = adapters.NewRabbitMq()
+}
+
+func GetRabbitMQ() *adapters.Rabbit {
+	return rabbitmq
 }

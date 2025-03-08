@@ -1,9 +1,11 @@
 package controllers
 
 import (
-	"api-hexagonal-cars/src/cars/application"
+	application "api-hexagonal-cars/src/cars/application/UseCases"
+	"api-hexagonal-cars/src/cars/application/service"
 	"api-hexagonal-cars/src/cars/domain"
 	"api-hexagonal-cars/src/cars/infrastructure"
+	"api-hexagonal-cars/src/cars/infrastructure/adapters"
 	"api-hexagonal-cars/src/cars/infrastructure/routes/validators"
 	"net/http"
 
@@ -12,12 +14,15 @@ import (
 
 type CreateCarController struct {
 	app *application.CreateCar
+	eventService *service.Event
 }
 
 func NewCreateCarController() *CreateCarController {
 	mysql := infrastructure.GetMySQL()
 	app := application.NewCreateCar(mysql)
-	return &CreateCarController{app: app}
+	rabbit := adapters.NewRabbitMq()
+	eventService := service.NewEvent(rabbit)
+	return &CreateCarController {app: app, eventService: eventService}
 }
 
 func (cc_c *CreateCarController) Run (c *gin.Context){
@@ -42,5 +47,12 @@ func (cc_c *CreateCarController) Run (c *gin.Context){
 	} else {
 		c.JSON(http.StatusCreated, gin.H {"mensaje": "Carro creado"})
 		c.JSON(http.StatusOK, cars)
+
+		cc_c.eventService.Run(&cars)
+		if err != nil {
+		// Puedes registrar este error en los logs si el evento no se envió correctamente
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error sending event to RabbitMQ"})
+	}
+
 	}
 }
